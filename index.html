@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>جدول السكان - عمارة 160</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            direction: rtl;
+            border-collapse: collapse;
+        }
+        thead th, tbody td {
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+        }
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-container select, .filter-container input {
+            width: 18%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<h2>جدول السكان - عمارة 160 حي النرجس</h2>
+
+<div class="filter-container" id="filters"></div>
+
+<table id="residentTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>الشقة</th>
+            <th>الاسم</th>
+            <th>رقم التليفون</th>
+            <th>الدور</th>
+            <th>موقع الشقة من المدخل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>أ / حسن ابو جنى</td><td>01092202965</td><td>الأرضي</td><td>أمامي يمين</td></tr>
+        <tr><td>2</td><td>أ / فاطمة أم علي</td><td>01156674131</td><td>الأرضي</td><td>خلفي يمين</td></tr>
+        <tr><td>3</td><td></td><td></td><td>الأرضي</td><td>خلفي يسار</td></tr>
+        <tr><td>4</td><td></td><td></td><td>الأرضي</td><td>أمامي يسار</td></tr>
+        <tr><td>5</td><td>أ / عبد الجواد محمود</td><td>01158054831</td><td>الأول</td><td>أمامي يمين</td></tr>
+        <tr><td>6</td><td>أ / محمود رجب</td><td>01116616374</td><td>الأول</td><td>خلفي يمين</td></tr>
+        <tr><td>7</td><td>أ / يوسف محمد</td><td>01142378908</td><td>الأول</td><td>خلفي يسار</td></tr>
+        <tr><td>8</td><td></td><td></td><td>الأول</td><td>أمامي يسار</td></tr>
+        <tr><td>9</td><td>أ / محمد قرني</td><td>01144692648</td><td>الثاني</td><td>أمامي يمين</td></tr>
+        <tr><td>10</td><td></td><td></td><td>الثاني</td><td>خلفي يمين</td></tr>
+        <tr><td>11</td><td>أ / احمد الهواري</td><td>01007366895</td><td>الثاني</td><td>خلفي يسار</td></tr>
+        <tr><td>12</td><td></td><td></td><td>الثاني</td><td>أمامي يسار</td></tr>
+        <tr><td>13</td><td>أ / ابو دارين</td><td>01126358826</td><td>الثالث</td><td>أمامي يمين</td></tr>
+        <tr><td>14</td><td>أ / محمد سمير</td><td>01114955977</td><td>الثالث</td><td>خلفي يمين</td></tr>
+        <tr><td>15</td><td>أ / محمد عبد المحسن</td><td>01065758723</td><td>الثالث</td><td>خلفي يسار</td></tr>
+        <tr><td>16</td><td></td><td></td><td>الثالث</td><td>أمامي يسار</td></tr>
+        <tr><td>17</td><td>أ / نبيل سالم</td><td>01147499393</td><td>الرابع</td><td>أمامي يمين</td></tr>
+        <tr><td>18</td><td>أ / محمد إسماعيل</td><td>01122861410</td><td>الرابع</td><td>خلفي يمين</td></tr>
+        <tr><td>19</td><td></td><td></td><td>الرابع</td><td>خلفي يسار</td></tr>
+        <tr><td>20</td><td>أ / احمد مجدي</td><td>01151750099</td><td>الرابع</td><td>أمامي يسار</td></tr>
+        <tr><td>21</td><td></td><td></td><td>الخامس</td><td>أمامي يمين</td></tr>
+        <tr><td>22</td><td>أ / ام عمر</td><td>01121983188</td><td>الخامس</td><td>خلفي يمين</td></tr>
+        <tr><td>23</td><td>أ / ايمن نصر</td><td>01007119297</td><td>الخامس</td><td>خلفي يسار</td></tr>
+        <tr><td>24</td><td>أ / أم مالك</td><td>01102927784</td><td>الخامس</td><td>أمامي يسار</td></tr>
+    </tbody>
+</table>
+
+<script>
+    function normalizeArabic(text) {
+        return text
+            .replace(/آ/g, "ا")
+            .replace(/أ/g, "ا")
+            .replace(/إ/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .replace(/ؤ/g, "و")
+            .replace(/ئ/g, "ي")
+            .replace(/ي/g, "ى")
+            .replace(/[\u064B-\u065F]/g, '')
+            .replace(/\s+/g, " ").trim();
+    }
+
+    $(document).ready(function () {
+        var table = $('#residentTable').DataTable({
+            pageLength: 25,
+            columnDefs: [
+                { targets: '_all', type: 'string' },
+                {
+                    targets: 0,
+                    type: 'num',
+                    render: $.fn.dataTable.render.number('', '', 0, '')
+                },
+                {
+                    targets: 3,
+                    orderData: [3],
+                    orderSequence: ['asc'],
+                    render: function (data) {
+                        const orderMap = {
+                            "الأرضي": 1,
+                            "الأول": 2,
+                            "الثاني": 3,
+                            "الثالث": 4,
+                            "الرابع": 5,
+                            "الخامس": 6
+                        };
+                        return "<span style='display:none'>" + (orderMap[data] || 99) + "</span>" + data;
+                    }
+                }
+            ],
+            language: {
+                search: "بحث:",
+                lengthMenu: "عرض _MENU_ صف",
+                info: "عرض _START_ إلى _END_ من _TOTAL_ صف",
+                paginate: {
+                    first: "الأول",
+                    last: "الأخير",
+                    next: "التالي",
+                    previous: "السابق"
+                }
+            }
+        });
+
+        // توليد فلاتر متقدمة
+        table.columns().every(function (index) {
+            var column = this;
+            var select = $('<select><option value="">الكل</option></select>')
+                .appendTo($('#filters'))
+                .on('change input', function () {
+                    var val = normalizeArabic($(this).val());
+                    column.search(val ? val : '', true, false).draw();
+                });
+
+            var input = $('<input type="text" placeholder="بحث...">')
+                .appendTo($('#filters'))
+                .on('keyup change clear', function () {
+                    var val = normalizeArabic($(this).val());
+                    column.search(val ? val : '', true, false).draw();
+                });
+
+            // تعبئة الاختيارات تلقائيًا
+            var uniqueData = column.data().unique().sort((a, b) => {
+                let an = normalizeArabic(a);
+                let bn = normalizeArabic(b);
+                return an.localeCompare(bn, 'ar', { numeric: true });
+            });
+
+            uniqueData.each(function (d) {
+                if (d) select.append('<option value="' + d + '">' + d + '</option>');
+            });
+        });
+
+        $.fn.dataTable.ext.type.search.string = function (data) {
+            return normalizeArabic(data);
+        };
+    });
+</script>
+
+</body>
+</html>
