@@ -33,8 +33,8 @@
     .filters select {
       padding: 8px;
       min-width: 160px;
-      font-size: 16px;
-      height: 44px;
+      font-size: 18px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -81,7 +81,7 @@
     <tr><td>18</td><td>أ / محمد إسماعيل</td><td>01122861410</td><td>الرابع</td><td>خلفي يمين</td></tr>
     <tr><td>19</td><td></td><td></td><td>الرابع</td><td>خلفي يسار</td></tr>
     <tr><td>20</td><td>أ / احمد مجدي</td><td>01151750099</td><td>الرابع</td><td>أمامي يسار</td></tr>
-    <tr><td>21</td><td>أ / ام كنزي</td><td>‪01144098787‬</td><td>الخامس</td><td>أمامي يمين</td></tr>
+    <tr><td>21</td><td>أ / ام كنزي</td><td>01144098787</td><td>الخامس</td><td>أمامي يمين</td></tr>
     <tr><td>22</td><td>أ / ام عمر</td><td>01121983188</td><td>الخامس</td><td>خلفي يمين</td></tr>
     <tr><td>23</td><td>أ / ايمن نصر</td><td>01007119297</td><td>الخامس</td><td>خلفي يسار</td></tr>
     <tr><td>24</td><td>أ / أم مالك</td><td>01102927784</td><td>الخامس</td><td>أمامي يسار</td></tr>
@@ -89,15 +89,20 @@
 </table>
 
 <script>
+  // دالة تطبيع النصوص (إزالة الهمزات والتنوين والنقط)
   function normalize(text) {
     return text
       .replace(/[أإآ]/g, "ا")
       .replace(/ة/g, "ه")
       .replace(/ى/g, "ي")
       .replace(/[ًٌٍَُِّْ]/g, '')
-      .replace(/\s+/g, " ")
-      .trim();
+      .replace(/\s+/g, " ").trim().toLowerCase();
   }
+
+  // فلترة جلوبال باستخدام normalize
+  $.fn.dataTable.ext.type.search.string = function (data) {
+    return normalize(data);
+  };
 
   $(document).ready(function () {
     const table = $('#residentTable').DataTable({
@@ -119,26 +124,27 @@
     });
 
     function populateFilter(colIdx, selector) {
-      let values = table.column(colIdx).data().toArray();
-      let map = {};
-      values.forEach(val => {
-        map[normalize(val)] = val; // احتفظ بالقيمة الأصلية
-      });
-      let uniqueNorm = Object.keys(map);
+      let values = table.column(colIdx).data().toArray().filter(v => v.trim() !== '');
+      let unique = [...new Set(values)];
+
+      // ترتيب منطقي للدور
       if (colIdx === 3) {
-        let customOrder = ['الأرضي', 'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس'];
-        uniqueNorm = customOrder.filter(item => values.includes(item));
+        const order = ['الأرضي', 'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس'];
+        unique.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+      } else if (colIdx === 0) {
+        unique.sort((a, b) => parseInt(a) - parseInt(b));
       } else {
-        uniqueNorm.sort((a, b) => isNaN(a) ? a.localeCompare(b, 'ar') : a - b);
+        unique.sort((a, b) => normalize(a).localeCompare(normalize(b), 'ar'));
       }
-      uniqueNorm.forEach(norm => {
-        $(selector).append(`<option value="${norm}">${map[norm]}</option>`);
+
+      unique.forEach(val => {
+        $(selector).append(`<option value="${val}">${val}</option>`);
       });
 
       $(selector).on('change', function () {
-        const val = normalize($(this).val());
+        const selected = normalize($(this).val());
         table.column(colIdx)
-          .search(val ? '^' + val + '$' : '', true, false)
+          .search(selected ? selected : '', true, false)
           .draw();
       });
     }
