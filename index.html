@@ -20,10 +20,7 @@
       border-collapse: collapse;
       direction: rtl;
     }
-    thead th {
-      text-align: center;
-    }
-    tbody td {
+    thead th, tbody td {
       text-align: center;
     }
     .filters {
@@ -34,8 +31,10 @@
       justify-content: center;
     }
     .filters select {
-      padding: 5px;
+      padding: 8px;
       min-width: 160px;
+      font-size: 16px;
+      height: 44px;
     }
   </style>
 </head>
@@ -82,7 +81,7 @@
     <tr><td>18</td><td>أ / محمد إسماعيل</td><td>01122861410</td><td>الرابع</td><td>خلفي يمين</td></tr>
     <tr><td>19</td><td></td><td></td><td>الرابع</td><td>خلفي يسار</td></tr>
     <tr><td>20</td><td>أ / احمد مجدي</td><td>01151750099</td><td>الرابع</td><td>أمامي يسار</td></tr>
-    <tr><td>21</td><td></td><td></td><td>الخامس</td><td>أمامي يمين</td></tr>
+    <tr><td>21</td><td>أ / ام كنزي</td><td>‪01144098787‬</td><td>الخامس</td><td>أمامي يمين</td></tr>
     <tr><td>22</td><td>أ / ام عمر</td><td>01121983188</td><td>الخامس</td><td>خلفي يمين</td></tr>
     <tr><td>23</td><td>أ / ايمن نصر</td><td>01007119297</td><td>الخامس</td><td>خلفي يسار</td></tr>
     <tr><td>24</td><td>أ / أم مالك</td><td>01102927784</td><td>الخامس</td><td>أمامي يسار</td></tr>
@@ -96,7 +95,8 @@
       .replace(/ة/g, "ه")
       .replace(/ى/g, "ي")
       .replace(/[ًٌٍَُِّْ]/g, '')
-      .replace(/\s+/g, " ").trim();
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   $(document).ready(function () {
@@ -120,15 +120,19 @@
 
     function populateFilter(colIdx, selector) {
       let values = table.column(colIdx).data().toArray();
-      let unique = [...new Set(values.map(normalize))];
+      let map = {};
+      values.forEach(val => {
+        map[normalize(val)] = val; // احتفظ بالقيمة الأصلية
+      });
+      let uniqueNorm = Object.keys(map);
       if (colIdx === 3) {
         let customOrder = ['الأرضي', 'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس'];
-        unique = customOrder.filter(item => values.includes(item));
+        uniqueNorm = customOrder.filter(item => values.includes(item));
       } else {
-        unique.sort((a, b) => isNaN(a) ? a.localeCompare(b, 'ar') : a - b);
+        uniqueNorm.sort((a, b) => isNaN(a) ? a.localeCompare(b, 'ar') : a - b);
       }
-      unique.forEach(val => {
-        $(selector).append(`<option value="${val}">${val}</option>`);
+      uniqueNorm.forEach(norm => {
+        $(selector).append(`<option value="${norm}">${map[norm]}</option>`);
       });
 
       $(selector).on('change', function () {
