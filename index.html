@@ -15,14 +15,14 @@
 
     h2 {
       text-align: center;
-      font-size: 30px;
+      font-size: 28px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       direction: rtl;
-      font-size: 23px;
+      font-size: 18px;
       font-weight: bold;
     }
 
@@ -40,23 +40,32 @@
     }
 
     .filters select {
-      padding: 10px 10px;
-      min-width: 155px;
-      font-size: 20px;
+      padding: 12px 16px;
+      min-width: 170px;
+      font-size: 18px;
       font-weight: bold;
       height: 50px;
     }
 
+    .reset-button {
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
     .dataTables_wrapper .dataTables_info,
     .dataTables_wrapper .dataTables_paginate {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .dataTables_wrapper .dataTables_filter input {
-      font-size: 18px;
+      font-size: 16px;
       padding: 6px;
     }
-
   </style>
 </head>
 <body>
@@ -69,6 +78,7 @@
   <select id="filter-phone"><option value="">رقم التليفون</option></select>
   <select id="filter-floor"><option value="">الدور</option></select>
   <select id="filter-location"><option value="">موقع الشقة</option></select>
+  <button class="reset-button" id="resetFilters">إعادة تعيين الفلاتر</button>
 </div>
 
 <table id="residentTable" class="display">
@@ -110,7 +120,6 @@
 </table>
 
 <script>
-  // دالة تطبيع النصوص (إزالة الهمزات والتنوين والنقط)
   function normalize(text) {
     return text
       .replace(/[أإآ]/g, "ا")
@@ -161,10 +170,12 @@
       });
 
       $(selector).on('change', function () {
-        const selected = normalize($(this).val());
-        table.column(colIdx)
-          .search(selected ? selected : '', true, false)
-          .draw();
+        const selected = $(this).val();
+        if (colIdx === 0) {
+          table.column(colIdx).search('^' + selected + '$', true, false).draw();
+        } else {
+          table.column(colIdx).search(selected ? normalize(selected) : '', true, false).draw();
+        }
       });
     }
 
@@ -173,6 +184,11 @@
     populateFilter(2, '#filter-phone');
     populateFilter(3, '#filter-floor');
     populateFilter(4, '#filter-location');
+
+    $('#resetFilters').on('click', function () {
+      $('.filters select').val('');
+      table.columns().search('').draw();
+    });
   });
 </script>
 
