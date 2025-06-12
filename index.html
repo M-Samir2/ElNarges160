@@ -7,15 +7,20 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap');
+
     body {
       font-family: 'Cairo', sans-serif;
       padding: 20px;
-      background-color: #f9f9f9;
+      background-color: #f4f4f9;
     }
 
     h2 {
       text-align: center;
-      font-size: 28px;
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      text-shadow: 1px 1px 2px #aaa;
     }
 
     table {
@@ -55,6 +60,7 @@
       color: white;
       border: none;
       cursor: pointer;
+      border-radius: 5px;
     }
 
     .dataTables_wrapper .dataTables_info,
@@ -171,10 +177,12 @@
 
       $(selector).on('change', function () {
         const selected = $(this).val();
-        if (colIdx === 0) {
+        if (selected === "") {
+          table.column(colIdx).search('').draw();
+        } else if (colIdx === 0) {
           table.column(colIdx).search('^' + selected + '$', true, false).draw();
         } else {
-          table.column(colIdx).search(selected ? normalize(selected) : '', true, false).draw();
+          table.column(colIdx).search(normalize(selected), true, false).draw();
         }
       });
     }
